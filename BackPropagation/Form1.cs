@@ -14,7 +14,7 @@ namespace BackPropagation
     public partial class Form1 : Form
     {
         private Network network = new Network(2, 2, 40);
-        private PolarToCartesian polarToCartesian = new PolarToCartesian();
+        private PolarToCartesianIO polarToCartesian = new PolarToCartesianIO();
         private Trainer trainer;
 
         private BackgroundWorker trainingWorker = new BackgroundWorker();
