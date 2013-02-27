@@ -42,8 +42,6 @@ namespace BackPropagation
         {
             lineGraph.SetData(trainer.Train((int)numTrainingSize.Value,
                 trainingWorker, chPrintData.Checked));
-            //trainer.Train((int)numTrainingSize.Value,
-            //    trainingWorker, chPrintData.Checked);
         }
 
         private void btnRun_Click(object sender, EventArgs e)

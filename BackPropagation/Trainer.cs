@@ -91,7 +91,7 @@ namespace BackPropagation
 
                 // TODO: average each value over the 20 iterations.
                 // Print every 20th iteration to the log file.
-                if (printData && i % 20 == 0)
+                if (printData && i % 10 == 0)
                 {
                     writer.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}",
                         i, inputs[0], inputs[1], expected[0], expected[1], actual[0],
@@ -149,6 +149,9 @@ namespace BackPropagation
                 }
             }
 
+            // Calculate the internal error of each medial neuron and store in
+            // sigma. Store the gradient of the sigmoid function at the value in sigma
+            // in sigmoid.
             double[] sigma = new double[network.Neurons];
             double[] sigmoid = new double[network.Neurons];
             for (int neuron = 0; neuron < network.Neurons; neuron++)
@@ -159,19 +162,29 @@ namespace BackPropagation
                     sigma[neuron] += errors[output] * network.SynTwo[neuron, output];
                 }
 
-                sigmoid[neuron] = 1 - Math.Pow(network.Medin[neuron], 2);
+                sigmoid[neuron] = dLogistic(network.Medin[neuron]);
             }
 
-            double delta;
             for (int input = 0; input < network.Inputs; input++)
             {
                 for (int neuron = 0; neuron < network.Neurons; neuron++)
                 {
-                    delta = rate * sigmoid[neuron] * sigma[neuron] * inputs[input];
-                    network.SynOne[0, neuron] = network.SynOne[input, neuron] + delta;
-                   // network.SynOne[0, neuron] = network.SynOne[input, neuron] + delta;
+                    network.SynOne[input, neuron]
+                        += rate * sigmoid[neuron] * sigma[neuron] * inputs[input];
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns the value of the derivative of the logistic function with
+        /// at given value for x.
+        /// </summary>
+        /// <param name="x">The value for x</param>
+        /// <returns>The value of d(logistic(x))/dx</returns>
+        private double dLogistic(double x)
+        {
+            //return 1.0 - Math.Pow(x, 2);
+            return Math.Exp(x) / Math.Pow(Math.Exp(x) + 1, 2);
         }
     }
 }

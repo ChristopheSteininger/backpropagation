@@ -16,14 +16,14 @@ namespace BackPropagation
     class Network
     {
         /// <summary>
-        /// Gets the synaptic weights between the input and medial neurons.
+        /// Gets and sets the synaptic weights between the input and medial neurons.
         /// </summary>
-        public double[,] SynOne { get { return synOne; } }
+        public double[,] SynOne { get { return synOne; } set { synOne = value; } }
         private double[,] synOne;
         /// <summary>
-        /// Gets the synaptic weights between the medial and outpout neurons.
+        /// Gets the and sets synaptic weights between the medial and outpout neurons.
         /// </summary>
-        public double[,] SynTwo { get { return synTwo; } }
+        public double[,] SynTwo { get { return synTwo; } set { synTwo = value; } }
         private double[,] synTwo;
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace BackPropagation
                     medin[neuron] += inputs[input] * synOne[input, neuron];
                 }
 
-                medout[neuron] = Math.Tanh(medin[neuron]);
+                medout[neuron] = sigmoid(medin[neuron]);
             }
 
             // Calculate the values of the output neurons.
@@ -115,6 +115,18 @@ namespace BackPropagation
             }
 
             return outputs;
+        }
+
+        /// <summary>
+        /// Returns the value of a sigmoid function, specifically the logistic function
+        /// with the given input x.
+        /// </summary>
+        /// <param name="x">The value for x</param>
+        /// <returns>The value of logistic(x)</returns>
+        private double sigmoid(double x)
+        {
+            //return Math.Tanh(x);
+            return 1.0 / (1 + Math.Exp(-x));
         }
 
         /// <summary>
