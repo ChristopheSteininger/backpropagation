@@ -190,13 +190,13 @@ namespace BackPropagation
 
         /// <summary>
         /// Returns the value of the derivative of the logistic function with
-        /// at given value for x.
+        /// using the result of the logistic function y where y = 1 / (1 + exp(-x)).
         /// </summary>
-        /// <param name="x">The value for x</param>
-        /// <returns>The value of d(logistic(x))/dx</returns>
-        private double dLogistic(double x)
+        /// <param name="y">The value for y</param>
+        /// <returns>The value of dy/dx at y</returns>
+        private double dLogistic(double y)
         {
-            return x * (1 - x);
+            return y * (1 - y);
         }
     }
 }

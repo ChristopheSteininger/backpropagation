@@ -15,7 +15,7 @@ namespace BackPropagation
         /// <summary>
         /// Gets the suggested learning rate for this behaviour.
         /// </summary>
-        public double LearningRate { get { return 0.1; } }
+        public double LearningRate { get { return 0.02; } }
 
         /// <summary>
         /// Gets the number of inputs for this behaviour.
@@ -68,6 +68,11 @@ namespace BackPropagation
             return new double[] { r, theta };
         }
 
+        /// <summary>
+        /// Returns a network with the correct number of inputs and outputs,
+        /// as well as the suggested number of medial neurons.
+        /// </summary>
+        /// <returns>The valid network</returns>
         public Network GetValidNetwork()
         {
             return new Network(Inputs, Outputs, MedialNeurons);
