@@ -31,6 +31,7 @@
             this.groupTraining = new System.Windows.Forms.GroupBox();
             this.chPrintData = new System.Windows.Forms.CheckBox();
             this.lblTrainingProgress = new System.Windows.Forms.Label();
+            this.lineGraph = new BackPropagation.LineGraph();
             this.btnTrain = new System.Windows.Forms.Button();
             this.numTrainingSize = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
@@ -45,7 +46,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.lineGraph = new BackPropagation.LineGraph();
             this.groupTraining.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTrainingSize)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -94,6 +94,18 @@
             this.lblTrainingProgress.Size = new System.Drawing.Size(67, 13);
             this.lblTrainingProgress.TabIndex = 11;
             this.lblTrainingProgress.Text = "PROGRESS";
+            // 
+            // lineGraph
+            // 
+            this.lineGraph.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lineGraph.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.lineGraph.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lineGraph.Location = new System.Drawing.Point(18, 50);
+            this.lineGraph.Name = "lineGraph";
+            this.lineGraph.Size = new System.Drawing.Size(613, 197);
+            this.lineGraph.TabIndex = 10;
             // 
             // btnTrain
             // 
@@ -220,13 +232,17 @@
             // numX
             // 
             this.numX.DecimalPlaces = 2;
-            this.numX.Enabled = false;
             this.numX.Increment = new decimal(new int[] {
             1,
             0,
             0,
             131072});
             this.numX.Location = new System.Drawing.Point(52, 25);
+            this.numX.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.numX.Name = "numX";
             this.numX.Size = new System.Drawing.Size(108, 20);
             this.numX.TabIndex = 2;
@@ -263,18 +279,6 @@
             this.button1.TabIndex = 2;
             this.button1.Text = "Reset";
             this.button1.UseVisualStyleBackColor = true;
-            // 
-            // lineGraph
-            // 
-            this.lineGraph.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lineGraph.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lineGraph.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lineGraph.Location = new System.Drawing.Point(18, 50);
-            this.lineGraph.Name = "lineGraph";
-            this.lineGraph.Size = new System.Drawing.Size(613, 197);
-            this.lineGraph.TabIndex = 10;
             // 
             // Form1
             // 

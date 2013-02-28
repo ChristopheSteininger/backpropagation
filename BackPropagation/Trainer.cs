@@ -30,8 +30,8 @@ namespace BackPropagation
         /// Creates a new instance of trainer with the network to train and
         /// the input/output to train for.
         /// </summary>
-        /// <param name="network"></param>
-        /// <param name="io"></param>
+        /// <param name="network">The network to train</param>
+        /// <param name="io">The input/output to use</param>
         public Trainer(Network network, TrainerIO io)
         {
             this.network = network;
@@ -43,23 +43,24 @@ namespace BackPropagation
         /// </summary>
         /// <param name="iterations">The number of train-test repetitions</param>
         /// <param name="worker">The background work to report progress to</param>
-        /// <param name="printData">Prints test number, input, expected and
-        /// actual output, error and total error to the log file if true</param>
+        /// <param name="printData">Prints test number and average total error
+        /// to the log file if true</param>
         /// <returns>The total error of each repetition</returns>
         public double[] Train(int iterations, BackgroundWorker worker, bool printData)
         {
             StreamWriter writer = null;
+            double totalErrorSum = 0;
+            const int averageSize = 20;
 
             // Open the log file if the method should write to it.
             if (printData)
             {
                 writer = new StreamWriter(logFile);
-                writer.WriteLine("Test\tInputs\t\tExpected"
-                    + "\t\tActual\t\tError\t\tTotal Error");
+                writer.WriteLine("Test\tTotal Error");
             }
 
             double[] allErrors = new double[iterations];
-            double[] inputs, expected, actual, errors;
+            double[] inputs, expected, actual;
 
             // Train and test the network for the given number of times.
             for (int i = 0; i < iterations; i++)
@@ -71,31 +72,31 @@ namespace BackPropagation
                 // Get the actual output of the network.
                 actual = network.GetOutput(inputs);
 
-                // Get the error for each output in the network.
-                errors = GetError(expected, actual);
-
-                // TODO: Remove fixed learning rate.
                 // Apply the back propagation algorithm.
-                BackPropagation(inputs, errors, 0.01);
+                BackPropagation(inputs, expected, actual, io.LearningRate);
 
-                // TODO: Calculate allErrors for any length number of errors.
                 // Calculate the total error as summation in quadrature.
-                allErrors[i] = Math.Sqrt(Math.Pow(errors[0], 2)
-                    + Math.Pow(errors[1], 2));
+                allErrors[i] = GetTotalError(expected, actual);
 
-                // Report progress every 1,000 iterations to the worker.
-                if (i % 1000 == 0)
+                // Report progress every 100 iterations to the worker.
+                if (i % 100 == 0)
                 {
                     worker.ReportProgress(i);
                 }
 
-                // TODO: average each value over the 20 iterations.
-                // Print every 20th iteration to the log file.
-                if (printData && i % 10 == 0)
+                // Print the average total error of every 20th
+                // iteration to the log file.
+                if (printData)
                 {
-                    writer.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}",
-                        i, inputs[0], inputs[1], expected[0], expected[1], actual[0],
-                        actual[1], errors[0], errors[1], allErrors[i]);
+                    totalErrorSum += allErrors[i];
+
+                    if (i % averageSize == 0)
+                    {
+                        writer.WriteLine("{0}\t{1}", i,
+                            totalErrorSum / averageSize);
+
+                        totalErrorSum = 0;
+                    }
                 }
             }
 
@@ -112,33 +113,45 @@ namespace BackPropagation
         }
 
         /// <summary>
-        /// Calculates the difference between each expected and actual output.
-        /// Pre: The lengths of the outputs are the same.
+        /// Calculates the total error of the output given the expected result.
         /// </summary>
-        /// <param name="expected">The expected outputs</param>
-        /// <param name="actual">The actual outputs</param>
-        /// <returns>The difference between the outputs</returns>
-        private double[] GetError(double[] expected, double[] actual)
+        /// <param name="expected"></param>
+        /// <param name="actual"></param>
+        /// <returns></returns>
+        private double GetTotalError(double[] expected, double[] actual)
         {
-            Debug.Assert(expected.Length == actual.Length, "Parameter lengths must be equal.");
+            Debug.Assert(expected.Length == actual.Length,
+                "Parameter lengths must be equal.");
 
-            double[] errors = new double[expected.Length];
+            double sum = 0;
             for (int i = 0; i < expected.Length; i++)
             {
-                errors[i] = expected[i] - actual[i];
+                sum += Math.Pow(expected[i] - actual[i], 2);
             }
 
-            return errors;
+            return Math.Sqrt(sum);
         }
 
         /// <summary>
         /// Applies the back propagation algorithm to the network.
         /// </summary>
         /// <param name="inputs">The input to the network</param>
-        /// <param name="errors">The errors on the ouput</param>
+        /// <param name="actual">The actual output of the network</param>
+        /// <param name="expected">The expected output of the network</param>
         /// <param name="rate">The learning rate</param>
-        private void BackPropagation(double[] inputs, double[] errors, double rate)
+        private void BackPropagation(double[] inputs, double[] expected,
+            double[] actual, double rate)
         {
+            Debug.Assert(expected.Length == actual.Length,
+                "Expected and actual output lengths must be equal.");
+
+            // Calculate the error.
+            double[] errors = new double[actual.Length];
+            for (int error = 0; error < actual.Length; error++)
+            {
+                errors[error] = dLogistic(actual[error]) * (expected[error] - actual[error]);
+            }
+
             // Adjust the weights between the medial and output layer.
             for (int output = 0; output < network.Outputs; output++)
             {
@@ -149,28 +162,28 @@ namespace BackPropagation
                 }
             }
 
-            // Calculate the internal error of each medial neuron and store in
-            // sigma. Store the gradient of the sigmoid function at the value in sigma
-            // in sigmoid.
-            double[] sigma = new double[network.Neurons];
-            double[] sigmoid = new double[network.Neurons];
+            // Calculate the internal error of each medial neuron.
+            double[] sigmamoid = new double[network.Neurons];
+            double sigma;
             for (int neuron = 0; neuron < network.Neurons; neuron++)
             {
-                sigma[neuron] = 0;
+                sigma = 0;
                 for (int output = 0; output < network.Outputs; output++)
                 {
-                    sigma[neuron] += errors[output] * network.SynTwo[neuron, output];
+                    sigma += errors[output] * network.SynTwo[neuron, output];
                 }
 
-                sigmoid[neuron] = dLogistic(network.Medin[neuron]);
+                sigmamoid[neuron] = dLogistic(network.Medout[neuron])
+                    * sigma;
             }
 
+            // Adjust the first synaptic layer.
             for (int input = 0; input < network.Inputs; input++)
             {
                 for (int neuron = 0; neuron < network.Neurons; neuron++)
                 {
                     network.SynOne[input, neuron]
-                        += rate * sigmoid[neuron] * sigma[neuron] * inputs[input];
+                        += rate * sigmamoid[neuron] * inputs[input];
                 }
             }
         }
@@ -183,8 +196,7 @@ namespace BackPropagation
         /// <returns>The value of d(logistic(x))/dx</returns>
         private double dLogistic(double x)
         {
-            //return 1.0 - Math.Pow(x, 2);
-            return Math.Exp(x) / Math.Pow(Math.Exp(x) + 1, 2);
+            return x * (1 - x);
         }
     }
 }

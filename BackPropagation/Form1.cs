@@ -13,7 +13,7 @@ namespace BackPropagation
 {
     public partial class Form1 : Form
     {
-        private Network network = new Network(2, 2, 40);
+        private Network network;
         private PolarToCartesianIO polarToCartesian = new PolarToCartesianIO();
         private Trainer trainer;
 
@@ -21,6 +21,7 @@ namespace BackPropagation
 
         public Form1()
         {
+            network = polarToCartesian.GetValidNetwork();
             trainer = new Trainer(network, polarToCartesian);
 
             InitializeComponent();

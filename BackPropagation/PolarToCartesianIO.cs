@@ -13,13 +13,35 @@ namespace BackPropagation
     class PolarToCartesianIO : TrainerIO
     {
         /// <summary>
+        /// Gets the suggested learning rate for this behaviour.
+        /// </summary>
+        public double LearningRate { get { return 0.1; } }
+
+        /// <summary>
+        /// Gets the number of inputs for this behaviour.
+        /// </summary>
+        public int Inputs { get { return 2; } }
+
+        /// <summary>
+        /// Gets the number of outputs for this behaviour.
+        /// </summary>
+        public int Outputs { get { return 2; } }
+
+        /// <summary>
+        /// Gets the suggested number of medial numbers for this behaviour.
+        /// </summary>
+        public int MedialNeurons { get { return 40; } }
+
+        private Random random = new Random();
+
+        /// <summary>
         /// Returns the cartesian representation of the polar input.
         /// Pre: Input length is 2.
         /// </summary>
         /// <param name="input">The polar coordinate. The first element
         /// is the value for r, the second is theta</param>
         /// <returns>The cartesian representation</returns>
-        public override double[] GetExpectedOutput(double[] input)
+        public double[] GetExpectedOutput(double[] input)
         {
             Debug.Assert(input.Length == 2, "Wrong input length");
 
@@ -38,21 +60,17 @@ namespace BackPropagation
         /// the theta value: [0, 2*PI).
         /// </summary>
         /// <returns>The input to the network</returns>
-        public override double[] GetValidInput()
+        public double[] GetValidInput()
         {
-            double r = nextDouble();
-            double theta = nextDouble() * 2 * Math.PI;
+            double r = random.NextDouble();
+            double theta = random.NextDouble() * 0.25 * Math.PI;
 
             return new double[] { r, theta };
         }
 
-        /// <summary>
-        /// For testing only. Returns a random double with 3 significant figures.
-        /// </summary>
-        /// <returns>The random double</returns>
-        private double nextDouble()
+        public Network GetValidNetwork()
         {
-            return random.Next(1000) / 1000.0;
+            return new Network(Inputs, Outputs, MedialNeurons);
         }
     }
 }

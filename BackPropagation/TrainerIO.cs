@@ -6,16 +6,21 @@ using System.Text;
 namespace BackPropagation
 {
     /// <summary>
-    /// An abstract class to define the input and output functions which
-    /// all trainer IOs must provide as well as a random number generator
-    /// to get random inputs.
+    /// An interface to define the input and output functions which
+    /// all trainer IOs must provide and the number of inputs and output to
+    /// the network.
     /// </summary>
-    abstract class TrainerIO
+    interface TrainerIO
     {
-        protected Random random = new Random();
+        double LearningRate { get; }
 
-        public abstract double[] GetExpectedOutput(double[] input);
+        int Inputs { get; }
+        int Outputs { get; }
+        int MedialNeurons { get; }
 
-        public abstract double[] GetValidInput();
+        double[] GetExpectedOutput(double[] input);
+        double[] GetValidInput();
+
+        Network GetValidNetwork();
     }
 }

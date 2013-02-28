@@ -29,8 +29,8 @@ namespace BackPropagation
         /// <summary>
         /// Gets input to each medial neuron.
         /// </summary>
-        public double[] Medin { get { return medin; } }
-        private double[] medin;
+        //public double[] Medin { get { return medin; } }
+        //private double[] medin;
 
         /// <summary>
         /// Gets the output of each medial neuron.
@@ -70,7 +70,7 @@ namespace BackPropagation
             synOne = InitialiseSynArray(inputs, neurons, random);
             synTwo = InitialiseSynArray(neurons, outputs, random);
 
-            this.medin = new double[neurons];
+            //this.medin = new double[neurons];
             this.medout = new double[neurons];
 
             this.neuronCount = neurons;
@@ -92,14 +92,17 @@ namespace BackPropagation
             // Calculate the values of the medial neurons.
             for (int neuron = 0; neuron < neuronCount; neuron++)
             {
-                medin[neuron] = 0;
+                //medin[neuron] = 0;
+                double sum = 0;
 
                 for (int input = 0; input < inputCount; input++)
                 {
-                    medin[neuron] += inputs[input] * synOne[input, neuron];
+                    //medin[neuron] += inputs[input] * synOne[input, neuron];
+                    sum += inputs[input] * synOne[input, neuron];
                 }
 
-                medout[neuron] = sigmoid(medin[neuron]);
+                //medout[neuron] = sigmoid(medin[neuron]);
+                medout[neuron] = sigmoid(sum);
             }
 
             // Calculate the values of the output neurons.
@@ -112,6 +115,8 @@ namespace BackPropagation
                 {
                     outputs[output] += medout[neuron] * synTwo[neuron, output];
                 }
+
+                outputs[output] = sigmoid(outputs[output]);
             }
 
             return outputs;
@@ -125,7 +130,6 @@ namespace BackPropagation
         /// <returns>The value of logistic(x)</returns>
         private double sigmoid(double x)
         {
-            //return Math.Tanh(x);
             return 1.0 / (1 + Math.Exp(-x));
         }
 
@@ -145,7 +149,7 @@ namespace BackPropagation
             {
                 for (int x = 0; x < a; x++)
                 {
-                    result[x, y] = 0.1 * random.NextDouble();
+                    result[x, y] = random.NextDouble() - 0.5;
                 }
             }
 
