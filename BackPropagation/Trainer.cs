@@ -56,7 +56,7 @@ namespace BackPropagation
             if (printData)
             {
                 writer = new StreamWriter(logFile);
-                writer.WriteLine("Test\tTotal Error");
+                writer.WriteLine("Test\tAverage Error");
             }
 
             double[] allErrors = new double[iterations];
@@ -149,7 +149,7 @@ namespace BackPropagation
             double[] errors = new double[actual.Length];
             for (int error = 0; error < actual.Length; error++)
             {
-                errors[error] = dLogistic(actual[error]) * (expected[error] - actual[error]);
+                errors[error] = expected[error] - actual[error];
             }
 
             // Adjust the weights between the medial and output layer.

@@ -15,7 +15,7 @@ namespace BackPropagation
         /// <summary>
         /// Gets the suggested learning rate for this behaviour.
         /// </summary>
-        public double LearningRate { get { return 0.02; } }
+        public double LearningRate { get { return 0.01; } }
 
         /// <summary>
         /// Gets the number of inputs for this behaviour.
