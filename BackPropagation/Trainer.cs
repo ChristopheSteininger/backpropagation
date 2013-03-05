@@ -73,7 +73,7 @@ namespace BackPropagation
                 actual = network.GetOutput(inputs);
 
                 // Apply the back propagation algorithm.
-                BackPropagation(inputs, expected, actual, io.LearningRate);
+                TrainTestPass(inputs, expected, actual, io.LearningRate);
 
                 // Calculate the total error as summation in quadrature.
                 allErrors[i] = GetTotalError(expected, actual);
@@ -133,13 +133,13 @@ namespace BackPropagation
         }
 
         /// <summary>
-        /// Applies the back propagation algorithm to the network.
+        /// Applies an interation of the back propagation algorithm to the network.
         /// </summary>
         /// <param name="inputs">The input to the network</param>
         /// <param name="actual">The actual output of the network</param>
         /// <param name="expected">The expected output of the network</param>
         /// <param name="rate">The learning rate</param>
-        private void BackPropagation(double[] inputs, double[] expected,
+        private void TrainTestPass(double[] inputs, double[] expected,
             double[] actual, double rate)
         {
             Debug.Assert(expected.Length == actual.Length,
@@ -152,40 +152,59 @@ namespace BackPropagation
                 errors[error] = expected[error] - actual[error];
             }
 
-            // Adjust the weights between the medial and output layer.
-            for (int output = 0; output < network.Outputs; output++)
+            // Calculate the delta values for the medial layer.
+            double[] delta = GetDeltaValues(network.SynTwo, errors);
+
+            // Adjust synOne.
+            for (int input = 0; input < network.Inputs; input++)
             {
                 for (int neuron = 0; neuron < network.Neurons; neuron++)
+                {
+                    network.SynOne[input, neuron] += rate * inputs[input] * delta[neuron]
+                        * dLogistic(network.Medout[neuron]);
+                }
+            }
+
+            // Adjust synTwo.
+            for (int neuron = 0; neuron < network.Neurons; neuron++)
+            {
+                for (int output = 0; output < network.Outputs; output++)
                 {
                     network.SynTwo[neuron, output] += rate * network.Medout[neuron]
                         * errors[output];
                 }
             }
 
-            // Calculate the internal error of each medial neuron.
-            double[] sigmamoid = new double[network.Neurons];
-            double sigma;
-            for (int neuron = 0; neuron < network.Neurons; neuron++)
+            return;
+        }
+
+        /// <summary>
+        /// Calculates the delta values of a set of neurons using the synaptic weights
+        /// and the output of the neurons at the end of the synapses.
+        /// </summary>
+        /// <param name="weights">The synaptic weights</param>
+        /// <param name="neuronOutputs">The outputs of the neurons and the inputs
+        /// during the backwards pass</param>
+        /// <returns>The delta values of the inputs to the synapses</returns>
+        private double[] GetDeltaValues(double[,] weights, double[] neuronOutputs)
+        {
+            Debug.Assert(weights.GetLength(1) == neuronOutputs.Length,
+                "Number of output neurons in weights array not equal to number of outputs.");
+
+            double[] delta = new double[weights.GetLength(0)];
+
+            for (int input = 0; input < delta.Length; input++)
             {
-                sigma = 0;
-                for (int output = 0; output < network.Outputs; output++)
+                double sum = 0;
+                for (int output = 0; output < neuronOutputs.Length; output++)
                 {
-                    sigma += errors[output] * network.SynTwo[neuron, output];
+                    sum += weights[input, output] * neuronOutputs[output];
                 }
 
-                sigmamoid[neuron] = dLogistic(network.Medout[neuron])
-                    * sigma;
+                delta[input] = sum;
             }
 
-            // Adjust the first synaptic layer.
-            for (int input = 0; input < network.Inputs; input++)
-            {
-                for (int neuron = 0; neuron < network.Neurons; neuron++)
-                {
-                    network.SynOne[input, neuron]
-                        += rate * sigmamoid[neuron] * inputs[input];
-                }
-            }
+            return delta;
         }
 
         /// <summary>
