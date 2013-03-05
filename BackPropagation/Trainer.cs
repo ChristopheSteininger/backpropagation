@@ -153,24 +153,39 @@ namespace BackPropagation
             }
 
             // Calculate the delta values for the medial layer.
-            double[] delta = GetDeltaValues(network.SynTwo, errors);
-
-            // Adjust synOne.
-            for (int input = 0; input < network.Inputs; input++)
+            double[][] deltas = new double[network.Layers.Length][];
+            double[,] weights = network.SynOut;
+            double[] neuronOutputs = errors;
+            for (int layer = network.Layers.Length - 1; layer >= 0; layer--)
             {
-                for (int neuron = 0; neuron < network.Neurons; neuron++)
-                {
-                    network.SynOne[input, neuron] += rate * inputs[input] * delta[neuron]
-                        * dLogistic(network.Medout[neuron]);
-                }
+                deltas[layer] = GetDeltaValues(weights, neuronOutputs);
+
+                weights = network.Layers[layer].Weights;
+                neuronOutputs = deltas[layer];
             }
 
-            // Adjust synTwo.
-            for (int neuron = 0; neuron < network.Neurons; neuron++)
+            // Adjust weights.
+            double[] currentInputs = inputs;
+            for (int layer = 0; layer < network.Layers.Length; layer++)
+            {
+                for (int input = 0; input < currentInputs.Length; input++)
+                {
+                    for (int neuron = 0; neuron < network.MedialNeurons; neuron++)
+                    {
+                        network.Layers[layer].Weights[input, neuron] += rate * currentInputs[input]
+                            * deltas[layer][neuron] * dLogistic(network.Medout[layer][neuron]);
+                    }
+                }
+
+                currentInputs = network.Medout[layer];
+            }
+
+            // Adjust weights of the last layer.
+            for (int neuron = 0; neuron < network.MedialNeurons; neuron++)
             {
                 for (int output = 0; output < network.Outputs; output++)
                 {
-                    network.SynTwo[neuron, output] += rate * network.Medout[neuron]
+                    network.SynOut[neuron, output] += rate * currentInputs[neuron]
                         * errors[output];
                 }
             }

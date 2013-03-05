@@ -15,7 +15,7 @@ namespace BackPropagation
         /// <summary>
         /// Gets the suggested learning rate for this behaviour.
         /// </summary>
-        public double LearningRate { get { return 0.01; } }
+        public double LearningRate { get { return 0.5; } }
 
         /// <summary>
         /// Gets the number of inputs for this behaviour.
@@ -28,9 +28,14 @@ namespace BackPropagation
         public int Outputs { get { return 2; } }
 
         /// <summary>
+        /// Gets the number of layers for this network.
+        /// </summary>
+        public int Layers { get { return 2; } }
+
+        /// <summary>
         /// Gets the suggested number of medial numbers for this behaviour.
         /// </summary>
-        public int MedialNeurons { get { return 40; } }
+        public int MedialNeurons { get { return 15; } }
 
         private Random random = new Random();
 
@@ -75,7 +80,7 @@ namespace BackPropagation
         /// <returns>The valid network</returns>
         public Network GetValidNetwork()
         {
-            return new Network(Inputs, Outputs, MedialNeurons);
+            return new Network(Inputs, Outputs, MedialNeurons, Layers);
         }
     }
 }

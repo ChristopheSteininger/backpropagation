@@ -7,6 +7,50 @@ using System.Diagnostics;
 
 namespace BackPropagation
 {
+    class MedialLayer
+    {
+        public double[,] Weights
+        {
+            get { return weights; }
+            set { weights = value; }
+        }
+        private double[,] weights;
+
+        public double[] GetOutput(double[] inputs)
+        {
+            Debug.Assert(inputs.Length == weights.GetLength(0),
+                "Input length does not match weight lengths.");
+
+            double[] outputs = new double[weights.GetLength(1)];
+
+            for (int neuron = 0; neuron < outputs.Length; neuron++)
+            {
+                double sum = 0;
+
+                for (int input = 0; input < inputs.Length; input++)
+                {
+                    sum += inputs[input] * weights[input, neuron];
+                }
+
+                outputs[neuron] = logistic(sum);
+            }
+
+
+            return outputs;
+        }
+
+        /// <summary>
+        /// Returns the value of a sigmoid function, specifically the logistic function
+        /// with the given input x.
+        /// </summary>
+        /// <param name="x">The value for x</param>
+        /// <returns>The value of logistic(x)</returns>
+        private double logistic(double x)
+        {
+            return 1.0 / (1 + Math.Exp(-x));
+        }
+    }
+
     /// <summary>
     /// Simulates a simple feed forward network with one hidden (medial) layer
     /// containing a variable number of neurons, as well as a variable number
@@ -15,33 +59,29 @@ namespace BackPropagation
     /// </summary>
     class Network
     {
-        /// <summary>
-        /// Gets and sets the synaptic weights between the input and medial neurons.
-        /// </summary>
-        public double[,] SynOne { get { return synOne; } set { synOne = value; } }
-        private double[,] synOne;
-        /// <summary>
-        /// Gets the and sets synaptic weights between the medial and outpout neurons.
-        /// </summary>
-        public double[,] SynTwo { get { return synTwo; } set { synTwo = value; } }
-        private double[,] synTwo;
-
-        /// <summary>
-        /// Gets input to each medial neuron.
-        /// </summary>
-        //public double[] Medin { get { return medin; } }
-        //private double[] medin;
+        private MedialLayer[] layers;
+        public MedialLayer[] Layers
+        {
+            get { return layers; }
+        }
 
         /// <summary>
         /// Gets the output of each medial neuron.
         /// </summary>
-        public double[] Medout { get { return medout; } }
-        private double[] medout;
+        public double[][] Medout { get { return medout; } }
+        private double[][] medout;
 
+        public double[,] SynOut
+        {
+            get { return synOut; }
+            set { synOut = value; }
+        }
+        private double[,] synOut;
+        
         /// <summary>
         /// Gets the number of neurons in the medial layer.
         /// </summary>
-        public int Neurons { get { return neuronCount; } }
+        public int MedialNeurons { get { return neuronCount; } }
         private readonly int neuronCount;
 
         /// <summary>
@@ -63,19 +103,30 @@ namespace BackPropagation
         /// <param name="inputs">The number of inputs</param>
         /// <param name="outputs">The number of outputs</param>
         /// <param name="neurons">The number of medial neurons</param>
-        public Network(int inputs, int outputs, int neurons)
+        public Network(int inputs, int outputs, int neurons, int layers)
         {
             Random random = new Random();
 
-            synOne = InitialiseSynArray(inputs, neurons, random);
-            synTwo = InitialiseSynArray(neurons, outputs, random);
-
-            //this.medin = new double[neurons];
-            this.medout = new double[neurons];
+            this.medout = new double[layers][];
 
             this.neuronCount = neurons;
             this.inputCount = inputs;
             this.outputCount = outputs;
+
+            this.synOut = InitialiseSynArray(neurons, outputs, random);
+            this.layers = new MedialLayer[layers];
+
+            for (int i = 0; i < layers; i++)
+            {
+                int layerInputs = neurons;
+                if (i == 0)
+                {
+                    layerInputs = inputs;
+                }
+
+                this.layers[i] = new MedialLayer();
+                this.layers[i].Weights = InitialiseSynArray(layerInputs, neurons, random);
+            }
         }
 
         /// <summary>
@@ -90,16 +141,10 @@ namespace BackPropagation
             Debug.Assert(inputs.Length == inputCount, "Incorrect number of inputs.");
 
             // Calculate the values of the medial neurons.
-            for (int neuron = 0; neuron < neuronCount; neuron++)
+            for (int layer = 0; layer < layers.Length; layer++)
             {
-                double sum = 0;
-
-                for (int input = 0; input < inputCount; input++)
-                {
-                    sum += inputs[input] * synOne[input, neuron];
-                }
-
-                medout[neuron] = logistic(sum);
+                medout[layer] = layers[layer].GetOutput(inputs);
+                inputs = medout[layer];
             }
 
             // Calculate the values of the output neurons.
@@ -110,22 +155,11 @@ namespace BackPropagation
 
                 for (int neuron = 0; neuron < neuronCount; neuron++)
                 {
-                    outputs[output] += medout[neuron] * synTwo[neuron, output];
+                    outputs[output] += inputs[neuron] * synOut[neuron, output];
                 }
             }
 
             return outputs;
-        }
-
-        /// <summary>
-        /// Returns the value of a sigmoid function, specifically the logistic function
-        /// with the given input x.
-        /// </summary>
-        /// <param name="x">The value for x</param>
-        /// <returns>The value of logistic(x)</returns>
-        private double logistic(double x)
-        {
-            return 1.0 / (1 + Math.Exp(-x));
         }
 
         /// <summary>

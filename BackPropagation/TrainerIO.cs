@@ -17,6 +17,7 @@ namespace BackPropagation
         int Inputs { get; }
         int Outputs { get; }
         int MedialNeurons { get; }
+        int Layers { get; }
 
         double[] GetExpectedOutput(double[] input);
         double[] GetValidInput();

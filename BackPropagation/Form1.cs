@@ -17,6 +17,8 @@ namespace BackPropagation
         private PolarToCartesianIO polarToCartesian = new PolarToCartesianIO();
         private Trainer trainer;
 
+        private int totalIterations = 0;
+
         private BackgroundWorker trainingWorker = new BackgroundWorker();
 
         public Form1()
@@ -36,13 +38,17 @@ namespace BackPropagation
 
         void trainingWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            lblTrainingProgress.Text = "Training: " + e.ProgressPercentage.ToString();
+            lblTrainingProgress.Text = "Training: "
+                + (totalIterations + e.ProgressPercentage).ToString();
         }
 
         void trainingWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            lineGraph.SetData(trainer.Train((int)numTrainingSize.Value,
-                trainingWorker, chPrintData.Checked));
+            int iterations = (int)numTrainingSize.Value;
+
+            lineGraph.SetData(trainer.Train(iterations, trainingWorker, chPrintData.Checked));
+
+            totalIterations += iterations;
         }
 
         private void btnRun_Click(object sender, EventArgs e)

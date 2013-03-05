@@ -73,12 +73,12 @@ namespace BackPropagation
                 {
                     int yPos = graphHeight * i / yAxisLines;
                     int xPos = i + axisPadding;
-                    double label = Math.Round(maxValue - maxValue * i / yAxisLines, 2);
+                    double label = Math.Round(maxValue - maxValue * i / yAxisLines, 3);
 
                     graphics.DrawLine(axisPen, i + axisPadding, yPos,
                         graphWidth + axisPadding, yPos);
 
-                    graphics.DrawString(label.ToString(), Font,
+                    graphics.DrawString((label * 100).ToString() + "%", Font,
                         axisBrush, new PointF(0, yPos));
                 }
 
