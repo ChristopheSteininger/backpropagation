@@ -56,7 +56,8 @@ namespace BackPropagation
             if (printData)
             {
                 writer = new StreamWriter(logFile);
-                writer.WriteLine("Test\tAverage Error");
+                writer.WriteLine("Test\tAverage Error\t{0} layer(s) with {1} neuron(s) per "
+                    + "layer. Learning rate = {2}", io.Layers, io.MedialNeurons, io.LearningRate);
             }
 
             double[] allErrors = new double[iterations];

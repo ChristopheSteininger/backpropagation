@@ -9,6 +9,9 @@ namespace BackPropagation
 {
     class MedialLayer
     {
+        /// <summary>
+        /// Gets or sets the weights between the inputs of the layer and the neurons.
+        /// </summary>
         public double[,] Weights
         {
             get { return weights; }
@@ -16,6 +19,11 @@ namespace BackPropagation
         }
         private double[,] weights;
 
+        /// <summary>
+        /// Calculates the output of the layer with the given inputs.
+        /// </summary>
+        /// <param name="inputs">The inputs to the layer</param>
+        /// <returns>The outputs of the neurons</returns>
         public double[] GetOutput(double[] inputs)
         {
             Debug.Assert(inputs.Length == weights.GetLength(0),
@@ -59,11 +67,14 @@ namespace BackPropagation
     /// </summary>
     class Network
     {
-        private MedialLayer[] layers;
+        /// <summary>
+        /// Gets the medial layers in the network.
+        /// </summary>
         public MedialLayer[] Layers
         {
             get { return layers; }
         }
+        private MedialLayer[] layers;
 
         /// <summary>
         /// Gets the output of each medial neuron.
@@ -71,6 +82,9 @@ namespace BackPropagation
         public double[][] Medout { get { return medout; } }
         private double[][] medout;
 
+        /// <summary>
+        /// Gets or sets the weights leading to the output layer.
+        /// </summary>
         public double[,] SynOut
         {
             get { return synOut; }
