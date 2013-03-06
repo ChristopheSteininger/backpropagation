@@ -36,21 +36,33 @@
             this.numTrainingSize = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.btnRun = new System.Windows.Forms.Button();
+            this.lblErrors = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.lblActual = new System.Windows.Forms.Label();
             this.lblResult = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.numY = new System.Windows.Forms.NumericUpDown();
-            this.numX = new System.Windows.Forms.NumericUpDown();
+            this.numTheta = new System.Windows.Forms.NumericUpDown();
+            this.numR = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnReset = new System.Windows.Forms.Button();
+            this.gbNetwork = new System.Windows.Forms.GroupBox();
+            this.numRate = new System.Windows.Forms.NumericUpDown();
+            this.numLayers = new System.Windows.Forms.NumericUpDown();
+            this.numNeurons = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupTraining.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTrainingSize)).BeginInit();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numY)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numTheta)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numR)).BeginInit();
+            this.gbNetwork.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numRate)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numLayers)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numNeurons)).BeginInit();
             this.SuspendLayout();
             // 
             // groupTraining
@@ -64,9 +76,9 @@
             this.groupTraining.Controls.Add(this.btnTrain);
             this.groupTraining.Controls.Add(this.numTrainingSize);
             this.groupTraining.Controls.Add(this.label5);
-            this.groupTraining.Location = new System.Drawing.Point(12, 12);
+            this.groupTraining.Location = new System.Drawing.Point(12, 136);
             this.groupTraining.Name = "groupTraining";
-            this.groupTraining.Size = new System.Drawing.Size(637, 317);
+            this.groupTraining.Size = new System.Drawing.Size(637, 356);
             this.groupTraining.TabIndex = 0;
             this.groupTraining.TabStop = false;
             this.groupTraining.Text = "Training";
@@ -78,7 +90,7 @@
             this.chPrintData.Checked = true;
             this.chPrintData.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chPrintData.Cursor = System.Windows.Forms.Cursors.Default;
-            this.chPrintData.Location = new System.Drawing.Point(18, 294);
+            this.chPrintData.Location = new System.Drawing.Point(18, 333);
             this.chPrintData.Name = "chPrintData";
             this.chPrintData.Size = new System.Drawing.Size(153, 17);
             this.chPrintData.TabIndex = 12;
@@ -89,7 +101,7 @@
             // 
             this.lblTrainingProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblTrainingProgress.AutoSize = true;
-            this.lblTrainingProgress.Location = new System.Drawing.Point(121, 260);
+            this.lblTrainingProgress.Location = new System.Drawing.Point(121, 299);
             this.lblTrainingProgress.Name = "lblTrainingProgress";
             this.lblTrainingProgress.Size = new System.Drawing.Size(67, 13);
             this.lblTrainingProgress.TabIndex = 11;
@@ -104,13 +116,13 @@
             this.lineGraph.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lineGraph.Location = new System.Drawing.Point(18, 50);
             this.lineGraph.Name = "lineGraph";
-            this.lineGraph.Size = new System.Drawing.Size(613, 197);
+            this.lineGraph.Size = new System.Drawing.Size(613, 236);
             this.lineGraph.TabIndex = 10;
             // 
             // btnTrain
             // 
             this.btnTrain.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnTrain.Location = new System.Drawing.Point(18, 253);
+            this.btnTrain.Location = new System.Drawing.Point(18, 292);
             this.btnTrain.Name = "btnTrain";
             this.btnTrain.Size = new System.Drawing.Size(97, 26);
             this.btnTrain.TabIndex = 9;
@@ -125,7 +137,7 @@
             0,
             0,
             0});
-            this.numTrainingSize.Location = new System.Drawing.Point(90, 24);
+            this.numTrainingSize.Location = new System.Drawing.Point(103, 24);
             this.numTrainingSize.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -154,31 +166,40 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.btnRun);
+            this.groupBox2.Controls.Add(this.lblErrors);
+            this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.lblActual);
             this.groupBox2.Controls.Add(this.lblResult);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.numY);
-            this.groupBox2.Controls.Add(this.numX);
+            this.groupBox2.Controls.Add(this.numTheta);
+            this.groupBox2.Controls.Add(this.numR);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(12, 335);
+            this.groupBox2.Location = new System.Drawing.Point(12, 498);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(637, 135);
+            this.groupBox2.Size = new System.Drawing.Size(637, 109);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Test";
             // 
-            // btnRun
+            // lblErrors
             // 
-            this.btnRun.Location = new System.Drawing.Point(18, 90);
-            this.btnRun.Name = "btnRun";
-            this.btnRun.Size = new System.Drawing.Size(97, 26);
-            this.btnRun.TabIndex = 8;
-            this.btnRun.Text = "Run";
-            this.btnRun.UseVisualStyleBackColor = true;
-            this.btnRun.Click += new System.EventHandler(this.btnRun_Click);
+            this.lblErrors.AutoSize = true;
+            this.lblErrors.Location = new System.Drawing.Point(262, 81);
+            this.lblErrors.Name = "lblErrors";
+            this.lblErrors.Size = new System.Drawing.Size(53, 13);
+            this.lblErrors.TabIndex = 9;
+            this.lblErrors.Text = "ERRORS";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(206, 81);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(37, 13);
+            this.label9.TabIndex = 8;
+            this.label9.Text = "Errors:";
             // 
             // lblActual
             // 
@@ -216,41 +237,48 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "Result:";
             // 
-            // numY
+            // numTheta
             // 
-            this.numY.DecimalPlaces = 2;
-            this.numY.Increment = new decimal(new int[] {
+            this.numTheta.DecimalPlaces = 2;
+            this.numTheta.Increment = new decimal(new int[] {
             1,
             0,
             0,
             131072});
-            this.numY.Location = new System.Drawing.Point(52, 51);
-            this.numY.Name = "numY";
-            this.numY.Size = new System.Drawing.Size(108, 20);
-            this.numY.TabIndex = 3;
+            this.numTheta.Location = new System.Drawing.Point(52, 51);
+            this.numTheta.Name = "numTheta";
+            this.numTheta.Size = new System.Drawing.Size(108, 20);
+            this.numTheta.TabIndex = 3;
+            this.numTheta.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numTheta.ValueChanged += new System.EventHandler(this.numTheta_ValueChanged);
             // 
-            // numX
+            // numR
             // 
-            this.numX.DecimalPlaces = 2;
-            this.numX.Increment = new decimal(new int[] {
+            this.numR.DecimalPlaces = 2;
+            this.numR.Increment = new decimal(new int[] {
             1,
             0,
             0,
             131072});
-            this.numX.Location = new System.Drawing.Point(52, 25);
-            this.numX.Maximum = new decimal(new int[] {
+            this.numR.Location = new System.Drawing.Point(52, 25);
+            this.numR.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.numX.Name = "numX";
-            this.numX.Size = new System.Drawing.Size(108, 20);
-            this.numX.TabIndex = 2;
-            this.numX.Value = new decimal(new int[] {
-            1,
+            this.numR.Name = "numR";
+            this.numR.Size = new System.Drawing.Size(108, 20);
+            this.numR.TabIndex = 2;
+            this.numR.Value = new decimal(new int[] {
+            5,
             0,
             0,
-            0});
+            65536});
+            this.numR.ValueChanged += new System.EventHandler(this.numR_ValueChanged);
             // 
             // label2
             // 
@@ -270,22 +298,123 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "r:";
             // 
-            // button1
+            // btnReset
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(549, 476);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 31);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Reset";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnReset.Location = new System.Drawing.Point(517, 70);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(100, 31);
+            this.btnReset.TabIndex = 2;
+            this.btnReset.Text = "Reset";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
+            // gbNetwork
+            // 
+            this.gbNetwork.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbNetwork.Controls.Add(this.numRate);
+            this.gbNetwork.Controls.Add(this.btnReset);
+            this.gbNetwork.Controls.Add(this.numLayers);
+            this.gbNetwork.Controls.Add(this.numNeurons);
+            this.gbNetwork.Controls.Add(this.label8);
+            this.gbNetwork.Controls.Add(this.label7);
+            this.gbNetwork.Controls.Add(this.label6);
+            this.gbNetwork.Location = new System.Drawing.Point(12, 12);
+            this.gbNetwork.Name = "gbNetwork";
+            this.gbNetwork.Size = new System.Drawing.Size(631, 118);
+            this.gbNetwork.TabIndex = 3;
+            this.gbNetwork.TabStop = false;
+            this.gbNetwork.Text = "Network";
+            // 
+            // numRate
+            // 
+            this.numRate.DecimalPlaces = 3;
+            this.numRate.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.numRate.Location = new System.Drawing.Point(103, 77);
+            this.numRate.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numRate.Name = "numRate";
+            this.numRate.Size = new System.Drawing.Size(108, 20);
+            this.numRate.TabIndex = 15;
+            this.numRate.ThousandsSeparator = true;
+            this.numRate.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            // 
+            // numLayers
+            // 
+            this.numLayers.Location = new System.Drawing.Point(103, 51);
+            this.numLayers.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numLayers.Name = "numLayers";
+            this.numLayers.Size = new System.Drawing.Size(108, 20);
+            this.numLayers.TabIndex = 14;
+            this.numLayers.ThousandsSeparator = true;
+            this.numLayers.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // numNeurons
+            // 
+            this.numNeurons.Location = new System.Drawing.Point(103, 25);
+            this.numNeurons.Name = "numNeurons";
+            this.numNeurons.Size = new System.Drawing.Size(108, 20);
+            this.numNeurons.TabIndex = 13;
+            this.numNeurons.ThousandsSeparator = true;
+            this.numNeurons.Value = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(15, 79);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(72, 13);
+            this.label8.TabIndex = 2;
+            this.label8.Text = "Learning rate:";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(15, 53);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(71, 13);
+            this.label7.TabIndex = 1;
+            this.label7.Text = "Medial layers:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(15, 27);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(82, 13);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "Medial neurons:";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(662, 519);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(662, 619);
+            this.Controls.Add(this.gbNetwork);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupTraining);
             this.Name = "Form1";
@@ -295,8 +424,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.numTrainingSize)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numY)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numTheta)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numR)).EndInit();
+            this.gbNetwork.ResumeLayout(false);
+            this.gbNetwork.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numRate)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numLayers)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numNeurons)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -305,22 +439,30 @@
 
         private System.Windows.Forms.GroupBox groupTraining;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.NumericUpDown numX;
+        private System.Windows.Forms.NumericUpDown numR;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown numY;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.NumericUpDown numTheta;
+        private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Label lblActual;
         private System.Windows.Forms.Label lblResult;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown numTrainingSize;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button btnRun;
         private System.Windows.Forms.Button btnTrain;
         private LineGraph lineGraph;
         private System.Windows.Forms.Label lblTrainingProgress;
         private System.Windows.Forms.CheckBox chPrintData;
+        private System.Windows.Forms.GroupBox gbNetwork;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown numRate;
+        private System.Windows.Forms.NumericUpDown numLayers;
+        private System.Windows.Forms.NumericUpDown numNeurons;
+        private System.Windows.Forms.Label lblErrors;
+        private System.Windows.Forms.Label label9;
     }
 }
 

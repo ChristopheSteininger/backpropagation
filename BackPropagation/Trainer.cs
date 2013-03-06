@@ -27,6 +27,16 @@ namespace BackPropagation
         private readonly TrainerIO io;
 
         /// <summary>
+        /// Gets or sets the learning rate used when training.
+        /// </summary>
+        public double LearningRate
+        {
+            get { return learningRate; }
+            set { learningRate = value; }
+        }
+        private double learningRate;
+
+        /// <summary>
         /// Creates a new instance of trainer with the network to train and
         /// the input/output to train for.
         /// </summary>
@@ -36,6 +46,7 @@ namespace BackPropagation
         {
             this.network = network;
             this.io = io;
+            learningRate = io.LearningRate;
         }
 
         /// <summary>
@@ -57,7 +68,7 @@ namespace BackPropagation
             {
                 writer = new StreamWriter(logFile);
                 writer.WriteLine("Test\tAverage Error\t{0} layer(s) with {1} neuron(s) per "
-                    + "layer. Learning rate = {2}", io.Layers, io.MedialNeurons, io.LearningRate);
+                    + "layer. Learning rate = {2}", io.Layers, io.MedialNeurons, learningRate);
             }
 
             double[] allErrors = new double[iterations];
@@ -74,7 +85,7 @@ namespace BackPropagation
                 actual = network.GetOutput(inputs);
 
                 // Apply the back propagation algorithm.
-                TrainTestPass(inputs, expected, actual, io.LearningRate);
+                TrainTestPass(inputs, expected, actual);
 
                 // Calculate the total error as summation in quadrature.
                 allErrors[i] = GetTotalError(expected, actual);
@@ -140,8 +151,7 @@ namespace BackPropagation
         /// <param name="actual">The actual output of the network</param>
         /// <param name="expected">The expected output of the network</param>
         /// <param name="rate">The learning rate</param>
-        private void TrainTestPass(double[] inputs, double[] expected,
-            double[] actual, double rate)
+        private void TrainTestPass(double[] inputs, double[] expected, double[] actual)
         {
             Debug.Assert(expected.Length == actual.Length,
                 "Expected and actual output lengths must be equal.");
@@ -173,8 +183,9 @@ namespace BackPropagation
                 {
                     for (int neuron = 0; neuron < network.MedialNeurons; neuron++)
                     {
-                        network.Layers[layer].Weights[input, neuron] += rate * currentInputs[input]
-                            * deltas[layer][neuron] * dLogistic(network.Medout[layer][neuron]);
+                        network.Layers[layer].Weights[input, neuron] += learningRate
+                            * currentInputs[input] * deltas[layer][neuron]
+                            * dLogistic(network.Medout[layer][neuron]);
                     }
                 }
 
@@ -186,7 +197,7 @@ namespace BackPropagation
             {
                 for (int output = 0; output < network.Outputs; output++)
                 {
-                    network.SynOut[neuron, output] += rate * currentInputs[neuron]
+                    network.SynOut[neuron, output] += learningRate * currentInputs[neuron]
                         * errors[output];
                 }
             }

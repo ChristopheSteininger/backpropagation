@@ -70,10 +70,7 @@ namespace BackPropagation
         /// <summary>
         /// Gets the medial layers in the network.
         /// </summary>
-        public MedialLayer[] Layers
-        {
-            get { return layers; }
-        }
+        public MedialLayer[] Layers { get { return layers; } }
         private MedialLayer[] layers;
 
         /// <summary>
